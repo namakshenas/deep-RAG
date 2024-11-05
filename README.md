@@ -1,65 +1,44 @@
 # Complex Retrieval-Augmented Generation (RAG) Pipeline Diagram
 
 ```mermaid
-graph TD
-  A[User Query] -->|User Input| B[Preprocessing]
-  B -->|Cleaned Query| C[Cache & Similar Query Check]
+sequenceDiagram
+    participant User
+    participant Preprocessor
+    participant Cache
+    participant EmbeddingService
+    participant RetrievalPipeline
+    participant KnowledgeBase
+    participant ContentStore
+    participant Scoring
+    participant LLM
+    participant CachingSystem
+    participant FeedbackSystem
 
-  subgraph Caching_and_Similarity_Check
-    C -->|Cache Hit| D[Return Cached Response]
-    C -->|Miss or Low Similarity| E[Proceed to Processing]
-  end
-
-  E --> F[Query Vector Embedding]
-
-  subgraph Embedding_Service
-    F --> G[Generate Query Embedding]
-    G --> H[Embedding Augmentation]
-    H --> I[Semantic Expansion and Synonym Embedding]
-  end
-
-  I --> J[Multi-Stage Retrieval Pipeline]
-
-  subgraph Retrieval_Pipeline
-    J --> K[Initial Vector Store Search]
-    K -->|Top-N Results| L[Dynamic Re-ranking]
-    L --> M[Secondary Retrieval from Knowledge Base]
-    M -->|Top-M Matches| N[Re-ranking and Contextual Filtering]
-    N -->|Final Relevant Embeddings| O[Document Retrieval]
-  end
-
-  subgraph Knowledge_Base_and_Content_Store
-    P[Knowledge Graph and Ontology] --> M
-    Q[Historical User Data] --> L
-    R[Document Store] --> O
-  end
-
-  O --> S[Advanced Relevance Scoring]
-
-  subgraph Context_and_Scoring
-    S --> T[Contextual Scoring]
-    T --> U[Relevance Filtering]
-  end
-
-  U --> V[Top-k Documents for LLM]
-
-  subgraph LLM_with_Adaptive_Context
-    V --> W[Response Generation with Contextual Documents]
-    W --> X[Multi-Turn Dialogue Tracking]
-    X --> Y[Response Refinement and Validation]
-  end
-
-  Y --> Z[Adaptive Caching and Response Storage]
-  Z --> AA[Store in Cache and Feedback System]
-  Y --> AB[Generated Response]
-
-  subgraph Relevance_Feedback_and_Model_Update
-    AB --> AC[User Feedback Collection]
-    AC --> AD[Adaptive Feedback Integration]
-    AD --> AE[Embedding and Retrieval Model Update]
-    AE --> G
-    AD --> M
-  end
-
-  AB --> AF[Display Final Response to User]
-```
+    User ->> Preprocessor: Send Query
+    Preprocessor ->> Cache: Check Cache & Similarity
+    alt Cache Hit
+        Cache ->> User: Return Cached Response
+    else Cache Miss
+        Cache ->> EmbeddingService: Proceed to Embedding Generation
+        EmbeddingService ->> EmbeddingService: Generate Query Embedding
+        EmbeddingService ->> EmbeddingService: Embedding Augmentation (Semantic Expansion)
+        EmbeddingService ->> RetrievalPipeline: Pass Augmented Embedding
+        RetrievalPipeline ->> RetrievalPipeline: Initial Vector Store Search
+        RetrievalPipeline ->> RetrievalPipeline: Dynamic Re-ranking
+        RetrievalPipeline ->> KnowledgeBase: Retrieve Additional Relevant Data
+        KnowledgeBase ->> RetrievalPipeline: Return Top-M Matches
+        RetrievalPipeline ->> RetrievalPipeline: Re-ranking and Filtering
+        RetrievalPipeline ->> ContentStore: Retrieve Documents Based on Embeddings
+        ContentStore ->> Scoring: Pass Retrieved Documents
+        Scoring ->> Scoring: Advanced Relevance Scoring
+        Scoring ->> Scoring: Contextual Scoring and Relevance Filtering
+        Scoring ->> LLM: Send Top-k Documents as Context
+        LLM ->> LLM: Generate Response with Contextual Documents
+        LLM ->> LLM: Track Multi-Turn Dialogue Context
+        LLM ->> CachingSystem: Store Response in Cache
+        CachingSystem ->> FeedbackSystem: Update Cache and Prepare Feedback System
+        LLM ->> User: Return Generated Response
+        User ->> FeedbackSystem: Provide Feedback on Response
+        FeedbackSystem ->> EmbeddingService: Adaptive Feedback Integration
+        FeedbackSystem ->> RetrievalPipeline: Model and Embedding Updates
+    end
