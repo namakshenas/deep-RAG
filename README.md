@@ -37,8 +37,8 @@ graph TD
   O --> S[Advanced Relevance Scoring]
 
   subgraph Context & Scoring
-    S --> T[Contextual Scoring (Time, Source)]
-    T --> U[Relevance Filtering (Bias Reduction)]
+    S --> T[Contextual Scoring]
+    T --> U[Relevance Filtering]
   end
 
   U --> V[Top-k Documents for LLM]
