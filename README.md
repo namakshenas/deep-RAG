@@ -1,6 +1,7 @@
 # Complex Retrieval-Augmented Generation (RAG) Pipeline Diagram
 
 Step 1 - User submits query: The user’s query initiates the RAG pipeline.
+
 Step 2 - Cache Check: Checks for an existing response in the cache.
 Step 3 - Embedding Generation: If not cached, generates and augments embeddings.
 	4.	Step 4 - Retrieval Process: Multi-stage retrieval and re-ranking of relevant documents.
