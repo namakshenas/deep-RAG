@@ -1,4 +1,4 @@
-# Complex Retrieval-Augmented Generation (RAG) Pipeline
+# Cached based Retrieval-Augmented Generation (RAG) Pipeline Diagram
 
 1. **Step 1 - User submits query**: The user’s query initiates the RAG pipeline.
 2. **Step 2 - Cache Check**: Checks for an existing response in the cache.
