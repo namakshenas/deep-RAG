@@ -11,18 +11,10 @@
 
 ```mermaid
 zenuml
-    User -> Static_RAG: Trigger Weekly Task
-    Static_RAG -> Publishers: Search for DEA Papers
-    Publishers --> Static_RAG: Return Relevant Papers
-    Static_RAG -> Knowledge_Base: Store Processed Papers
-    
-    User -> Dynamic_RAG: Submit DEA Model Inputs
-    Dynamic_RAG -> Knowledge_Base: Query Relevant Information
-    Dynamic_RAG -> Report_Generator: Generate Reports
-    Report_Generator --> User: Deliver Performance Report
-    
-    Static_RAG -> Knowledge_Base: Update with New Papers
-    Dynamic_RAG -> Knowledge_Base: Retrieve Data
-    end
+    title Annotators
+    @Actor Alice
+    @Database Bob
+    Alice->Bob: Hi Bob
+    Bob->Alice: Hi Alice
 
 
